@@ -62,7 +62,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 										'title'         => __( 'Enable/Disable', 'woocommerce' ),
 										'type'          => 'checkbox',
 										'label'         => __( 'Enable this shipping method', 'woocommerce' ),
-										'default'       => 'no',
+										'default'       => 'yes',
 									),
 						'title' => array(
 										'title'         => __( 'Method Title', 'woocommerce' ),
