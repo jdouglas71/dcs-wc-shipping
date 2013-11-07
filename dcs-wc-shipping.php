@@ -105,13 +105,20 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					global $woocommerce;
 
 					$totalCost = $woocommerce->cart->get_cart_total();
+
+					$totalCost = str_replace( "&#36;", "", $totalCost );
+					$totalCost = preg_replace( "/[^0-9\.]/", "", $totalCost );
+
 					$cost = 4.95;
 
-					if( ($totalCost > 50) && ($totalCost < 125) )
+					$dir = plugin_dir_path( __FILE__ );
+					error_log( "totalCost: ".$totalCost.PHP_EOL, 3, $dir."/dcs_wc_shipping.log" );	
+
+					if( ($totalCost > 50.0) && ($totalCost < 125.0) )
 					{
 						$cost = 7.95;
 					}
-					else if( $totalCost > 125 )
+					else if( $totalCost > 125.0 )
 					{
 						$cost = 10.95;
 					}
@@ -122,6 +129,8 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						'cost' => $cost,
 						'calc_tax' => 'per_order'
 					);
+
+					$this->add_rate( $rate );
 				}
 			}
 		}
