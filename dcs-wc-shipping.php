@@ -104,31 +104,43 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				{
 					global $woocommerce;
 
-					$totalCost = $woocommerce->cart->get_cart_total();
-
-					$totalCost = str_replace( "&#36;", "", $totalCost );
-					$totalCost = preg_replace( "/[^0-9\.]/", "", $totalCost );
-
-					$cost = 4.95;
-
 					$dir = plugin_dir_path( __FILE__ );
-					error_log( "totalCost: ".$totalCost.PHP_EOL, 3, $dir."/dcs_wc_shipping.log" );	
 
-					if( ($totalCost > 50.0) && ($totalCost < 125.0) )
-					{
-						$cost = 7.95;
-					}
-					else if( $totalCost > 125.0 )
-					{
-						$cost = 10.95;
-					}
+					error_log( "Starting\n", 3, $dir."/dcs_wc_shipping.log" );
+					error_log( "Package: ". var_export($package,true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
 
 					$rate = array( 
 						'id' => $this->id,
-						'label' => $this->title,
-						'cost' => $cost,
+						'label' => "No Shipping Required",
+						'cost' => 0,
 						'calc_tax' => 'per_order'
 					);
+
+					if( $woocommerce->cart->needs_shipping() )
+					{
+						$totalCost = $package['contents_cost'];
+						$shippingCost = 4.95;
+
+						error_log( "totalCost: ".$totalCost."\n", 3, $dir."/dcs_wc_shipping.log" );	
+
+						if( ($totalCost > 50.0) && ($totalCost < 125.0) )
+						{
+							$shippingCost = 7.95;
+						}
+						else if( $totalCost > 125.0 )
+						{
+							$shippingCost = 10.95;
+						}
+
+						$rate = array( 
+							'id' => $this->id,
+							'label' => $this->title,
+							'cost' => $shippingCost,
+							'calc_tax' => 'per_order'
+						);
+					}
+
+					error_log( "Finishing\n", 3, $dir."/dcs_wc_shipping.log" );
 
 					$this->add_rate( $rate );
 				}
