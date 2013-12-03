@@ -6,4 +6,4 @@ Stable tag: 3.5.1
 
 
 == Description == 
-WooCommerce plugin to add flat rate shipping based on the order total cost.
+WooCommerce plugin to add specialized shipping costs for the WarmBelly website.
