@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DCS WooCommerce Shipping
  * Description: Creates a flat rate shipping method for woocommerce based on the order total.
- * Version: 0.1
+ * Version: 0.2
  * Author: Jason Douglas
  * Author URI: http://douglasconsulting.net
  * License: GPL2
@@ -15,8 +15,8 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 {
 	function dcs_wc_shipping_method_init()
 	{
-		if( !class_exists( 'WC_DCS_Flat_Shipping_Method' ) ) {
-			class WC_DCS_Flat_Shipping_Method extends WC_Shipping_Method {
+		if( !class_exists( 'WC_DCS_Warmbelly_Shipping_Method' ) ) {
+			class WC_DCS_Warmbelly_Shipping_Method extends WC_Shipping_Method {
 				/**
 				 * Constructor for your shipping class
 				 *
@@ -24,10 +24,10 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				 * @return void
 				 */
 				public function __construct() {
-					$this->id                 = 'dcs_flat_shipping_method';
-					$this->method_title       = '% Based Flat Rate';
-					$this->title 			  = 'Percentage Based Flat Rate';
-					$this->method_description = __( '<b>Flat Rate Shipping based on Order Total.</b><br /><table border="1"><tr><td>$1-$50</td><td>$4.95</td></tr><tr><td>$51-$125</td><td>$7.95</td></tr><tr><td>$126+</td><td>$10.95</td></tr></table>' ); // 
+					$this->id                 = 'dcs_warmbelly_shipping_method';
+					$this->method_title       = 'Warmbelly Shipping Rate';
+					$this->title 			  = 'Warmbelly Shipping Rate';
+					$this->method_description = __( '<b>WarmBelly Shipping based on Total Number of Suits.</b><br /><table border="1"><tr><td>$1-$50</td><td>$4.95</td></tr><tr><td>$51-$125</td><td>$7.95</td></tr><tr><td>$126+</td><td>$10.95</td></tr></table>' ); // 
 					$this->enabled            = "yes"; // This can be added as an setting but for this example its forced enabled
 					$this->init();
 				}
@@ -154,7 +154,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 	 */
     function dcs_add_your_shipping_method( $methods ) 
 	{
-		$methods[] = 'WC_DCS_Flat_Shipping_Method'; 
+		$methods[] = 'WC_DCS_Warmbelly_Shipping_Method'; 
 		return $methods;
 	}
     add_filter( 'woocommerce_shipping_methods', 'dcs_add_your_shipping_method' );
