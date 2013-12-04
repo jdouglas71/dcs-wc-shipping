@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: DCS WooCommerce Shipping
- * Description: Creates a flat rate shipping method for woocommerce based on the order total.
+ * Description: Creates a shipping method specific to WarmBelly.com.
  * Version: 0.2
  * Author: Jason Douglas
  * Author URI: http://douglasconsulting.net
