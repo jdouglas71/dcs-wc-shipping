@@ -135,7 +135,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 	
 							$rate = array( 
 								'id' => $this->id,
-								'label' => $this->title,
+								'label' => "Per Suit Rate",
 								'cost' => ($totalQuantity * 7.00),
 								'calc_tax' => 'per_order'
 							);
