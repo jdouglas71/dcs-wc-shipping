@@ -107,38 +107,39 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					$dir = plugin_dir_path( __FILE__ );
 
 					error_log( "Starting\n", 3, $dir."/dcs_wc_shipping.log" );
-					error_log( "Package: ". var_export($package,true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
-					error_log( "Cart: ". var_export($woocommerce->cart->get_cart(),true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
+					//error_log( "Package: ". var_export($package,true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
+					//error_log( "Package ends.\n\n\n\n", 3, $dir."/dcs_wc_shipping.log" ); 
+					//error_log( "Cart: ". var_export($woocommerce->cart->get_cart(),true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
+					//error_log( "Cart Ends. \n\n\n\n", 3, $dir."/dcs_wc_shipping.log" ); 
 
 					$rate = array( 
 						'id' => $this->id,
-						'label' => "No Shipping Required",
+						'label' => "Free Shipping",
 						'cost' => 0,
 						'calc_tax' => 'per_order'
 					);
 
 					if( $woocommerce->cart->needs_shipping() )
 					{
-						$totalCost = $package['contents_cost'];
-						$shippingCost = 4.95;
+						$totalQuantity = 0;
 
-						error_log( "totalCost: ".$totalCost."\n", 3, $dir."/dcs_wc_shipping.log" );	
-
-						if( ($totalCost > 50.0) && ($totalCost < 125.0) )
+						foreach( $woocommerce->cart->cart_contents as $item )
 						{
-							$shippingCost = 7.95;
-						}
-						else if( $totalCost > 125.0 )
-						{
-							$shippingCost = 10.95;
+							$totalQuantity += $item['quantity'];
 						}
 
-						$rate = array( 
-							'id' => $this->id,
-							'label' => $this->title,
-							'cost' => $shippingCost,
-							'calc_tax' => 'per_order'
-						);
+						error_log( "Shopping Cart Quantity: " . $totalQuantity . "\n", 3, $dir."/dcs_wc_shipping.log" );
+
+						if( $totalQuantity < 4 )
+						{
+	
+							$rate = array( 
+								'id' => $this->id,
+								'label' => $this->title,
+								'cost' => ($totalQuantity * 7.00),
+								'calc_tax' => 'per_order'
+							);
+						}
 					}
 
 					error_log( "Finishing\n", 3, $dir."/dcs_wc_shipping.log" );
