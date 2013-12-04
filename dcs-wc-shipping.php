@@ -25,9 +25,9 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				 */
 				public function __construct() {
 					$this->id                 = 'dcs_warmbelly_shipping_method';
-					$this->method_title       = 'Warmbelly Shipping Rate';
-					$this->title 			  = 'Warmbelly Shipping Rate';
-					$this->method_description = __( '<b>WarmBelly Shipping based on Total Number of Suits.</b><br /><table border="1"><tr><td>$1-$50</td><td>$4.95</td></tr><tr><td>$51-$125</td><td>$7.95</td></tr><tr><td>$126+</td><td>$10.95</td></tr></table>' ); // 
+					$this->method_title       = 'Warm Belly Shipping Rate';
+					$this->title 			  = 'Warm Belly Shipping Rate';
+					$this->method_description = __( '<b>Warm Belly Shipping based on Total Number of Suits.</b><br /><table border="1"><tr><td>1-3 suits</td><td>$7 per suit</td></tr><tr><td>4 suits or more</td><td>Free</td></tr></table>' ); // 
 					$this->enabled            = "yes"; // This can be added as an setting but for this example its forced enabled
 					$this->init();
 				}
@@ -68,7 +68,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 										'title'         => __( 'Method Title', 'woocommerce' ),
 										'type'          => 'text',
 										'description'   => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-										'default'       => __( 'Percentage Based Flat Rate', 'woocommerce' ),
+										'default'       => __( 'Per Suit Rate', 'woocommerce' ),
 										'desc_tip'      => true
 									),
 						'availability' => array(
@@ -108,6 +108,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
 					error_log( "Starting\n", 3, $dir."/dcs_wc_shipping.log" );
 					error_log( "Package: ". var_export($package,true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
+					error_log( "Cart: ". var_export($woocommerce->cart->get_cart(),true)."\n", 3, $dir."/dcs_wc_shipping.log" );  
 
 					$rate = array( 
 						'id' => $this->id,
