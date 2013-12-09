@@ -132,13 +132,34 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
 						if( $totalQuantity < 4 )
 						{
+							if( $totalQuantity == 1 )
+							{
+								$rate = array( 
+									'id' => $this->id,
+									'label' => "Bulk Suit Rate",
+									'cost' => 7.00,
+									'calc_tax' => 'per_order'
+								);
+							}
+							else if( $totalQuantity == 2 )
+							{
+								$rate = array( 
+									'id' => $this->id,
+									'label' => "Bulk Suit Rate",
+									'cost' => 10.00,
+									'calc_tax' => 'per_order'
+								);
+							}
+							else 
+							{
+								$rate = array( 
+									'id' => $this->id,
+									'label' => "Bulk Suit Rate",
+									'cost' => 13.00,
+									'calc_tax' => 'per_order'
+								);
+							}
 	
-							$rate = array( 
-								'id' => $this->id,
-								'label' => "Per Suit Rate",
-								'cost' => ($totalQuantity * 7.00),
-								'calc_tax' => 'per_order'
-							);
 						}
 					}
 
