@@ -114,7 +114,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
 					$rate = array( 
 						'id' => $this->id,
-						'label' => "3 day US Priority Mail.",
+						'label' => "3 day US Priority Mail",
 						'cost' => 0,
 						'calc_tax' => 'per_order'
 					);
@@ -136,7 +136,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							{
 								$rate = array( 
 									'id' => $this->id,
-									'label' => "3 day US Priority Mail.",
+									'label' => "3 day US Priority Mail",
 									'cost' => 7.00,
 									'calc_tax' => 'per_order'
 								);
@@ -145,7 +145,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							{
 								$rate = array( 
 									'id' => $this->id,
-									'label' => "3 day US Priority Mail.",
+									'label' => "3 day US Priority Mail",
 									'cost' => 10.00,
 									'calc_tax' => 'per_order'
 								);
@@ -154,7 +154,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							{
 								$rate = array( 
 									'id' => $this->id,
-									'label' => "3 day US Priority Mail.",
+									'label' => "3 day US Priority Mail",
 									'cost' => 13.00,
 									'calc_tax' => 'per_order'
 								);
@@ -276,7 +276,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
 						$rate = array( 
 							'id' => $this->id,
-							'label' => "2 Day FedEx Delivery.",
+							'label' => "2 Day FedEx Delivery",
 							'cost' => ($totalQuantity * 20.00),
 							'calc_tax' => 'per_order'
 						);
