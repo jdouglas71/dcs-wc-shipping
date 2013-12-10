@@ -27,8 +27,9 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					$this->id                 = 'dcs_warmbelly_shipping_method';
 					$this->method_title       = 'Warm Belly Shipping Rate';
 					$this->title 			  = 'Warm Belly Shipping Rate';
-					$this->method_description = __( '<b>Warm Belly Shipping based on Total Number of Suits.</b><br /><table border="1"><tr><td>1-3 suits</td><td>$7 per suit</td></tr><tr><td>4 suits or more</td><td>Free</td></tr></table>' ); // 
+					$this->method_description = __( '<b>Warm Belly Shipping based on Total Number of Suits.</b><br /><table border="1"><tr><td>1 suit</td><td>$7</td></tr><tr><td>2 suits</td><td>$10</td></tr><tr><td>3 suits</td><td>$13</td></tr><tr><td>4 suits or more</td><td>Free</td></tr></table>' ); // 
 					$this->enabled            = "yes"; // This can be added as an setting but for this example its forced enabled
+					$this->countries		  = array( "United States" );
 					$this->init();
 				}
 		
@@ -70,24 +71,6 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 										'description'   => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
 										'default'       => __( 'Per Suit Rate', 'woocommerce' ),
 										'desc_tip'      => true
-									),
-						'availability' => array(
-										'title'         => __( 'Availability', 'woocommerce' ),
-										'type'          => 'select',
-										'default'       => 'all',
-										'class'         => 'availability',
-										'options'       => array(
-											'all'       => __( 'All allowed countries', 'woocommerce' ),
-											'specific'  => __( 'Specific Countries', 'woocommerce' ),
-										),
-									),
-						'countries' => array(
-										'title'         => __( 'Specific Countries', 'woocommerce' ),
-										'type'          => 'multiselect',
-										'class'         => 'chosen_select',
-										'css'           => 'width: 450px;',
-										'default'       => '',
-										'options'       => $woocommerce->countries->countries,
 									),
 						);
 				}
@@ -167,6 +150,41 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
 					$this->add_rate( $rate );
 				}
+
+				/**
+				 * is_available function.
+				 *
+				 * @access public
+				 * @param mixed $package
+				 * @return bool
+				 */
+				function is_available( $package ) {
+					global $woocommerce;
+
+					if ($this->enabled=="no") return false;
+
+					if ($this->availability=='including') :
+
+						if (is_array($this->countries)) :
+							if ( ! in_array( $package['destination']['country'], $this->countries) ) return false;
+						endif;
+
+					else :
+
+						if (is_array($this->countries)) :
+							if ( in_array( $package['destination']['country'], $this->countries) ) return false;
+						endif;
+
+					endif;
+
+					$state = $package['destination']['state'];
+					if( $state == "AK" || $state == "HI" )
+					{
+						return false;
+					}
+
+					return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', true );
+				}
 			}
 		}
 
@@ -182,8 +200,9 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					$this->id                 = 'dcs_warmbelly_fedex_shipping_method';
 					$this->method_title       = 'Warm Belly FedEx Shipping Rate';
 					$this->title 			  = 'Warm Belly FedEx Shipping Rate';
-					$this->method_description = __( '<b>Warm Belly FedEx Shipping.</b><br /><table><tr><td>$20.00 per suit.</td></tr></table>' ); // 
+					$this->method_description = __( '<b>Warm Belly FedEx Shipping.</b><br /><table><tr><td>$20.00 per suit (US Lower 48 only).<br />$35.00 (US - AK & HI)</td></tr></table><br />' ); // 
 					$this->enabled            = "yes"; // This can be added as an setting but for this example its forced enabled
+					$this->countries 		  = array( "United States" );
 					$this->init();
 				}
 
@@ -226,24 +245,6 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 										'default'       => __( 'FedEx Per Suit Rate', 'woocommerce' ),
 										'desc_tip'      => true
 									),
-						'availability' => array(
-										'title'         => __( 'Availability', 'woocommerce' ),
-										'type'          => 'select',
-										'default'       => 'all',
-										'class'         => 'availability',
-										'options'       => array(
-											'all'       => __( 'All allowed countries', 'woocommerce' ),
-											'specific'  => __( 'Specific Countries', 'woocommerce' ),
-										),
-									),
-						'countries' => array(
-										'title'         => __( 'Specific Countries', 'woocommerce' ),
-										'type'          => 'multiselect',
-										'class'         => 'chosen_select',
-										'css'           => 'width: 450px;',
-										'default'       => '',
-										'options'       => $woocommerce->countries->countries,
-									),
 						);
 				}
 
@@ -263,6 +264,16 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
 					error_log( "Starting\n", 3, $dir."/dcs_wc_shipping.log" );
 
+					$rate = 20.00;
+
+					$state = $package['destination']['state'];
+					error_log( "State: ".$state."\n", 3, $dir."/dcs_wc_shipping.log" );
+					if( $state == "AK" || $state == "HI" )
+					{
+						$rate = 35.00;
+					}
+					error_log( "Rate: ".$rate."\n", 3, $dir."/dcs_wc_shipping.log" );
+
 					if( $woocommerce->cart->needs_shipping() )
 					{
 						$totalQuantity = 0;
@@ -277,7 +288,7 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						$rate = array( 
 							'id' => $this->id,
 							'label' => "2 Day FedEx Delivery",
-							'cost' => ($totalQuantity * 20.00),
+							'cost' => ($totalQuantity * $rate),
 							'calc_tax' => 'per_order'
 						);
 
@@ -285,7 +296,35 @@ if( in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					}
 
 					error_log( "Finishing\n", 3, $dir."/dcs_wc_shipping.log" );
+				}
 
+				/**
+				 * is_available function.
+				 *
+				 * @access public
+				 * @param mixed $package
+				 * @return bool
+				 */
+				function is_available( $package ) {
+					global $woocommerce;
+
+					if ($this->enabled=="no") return false;
+
+					if ($this->availability=='including') :
+
+						if (is_array($this->countries)) :
+							if ( ! in_array( $package['destination']['country'], $this->countries) ) return false;
+						endif;
+
+					else :
+
+						if (is_array($this->countries)) :
+							if ( in_array( $package['destination']['country'], $this->countries) ) return false;
+						endif;
+
+					endif;
+
+					return apply_filters( 'woocommerce_shipping_' . $this->id . '_is_available', true );
 				}
 			}
 		}
